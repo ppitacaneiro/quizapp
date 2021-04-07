@@ -13,7 +13,7 @@ class RespondentSeeder extends Seeder
     public function run()
     {
         factory(App\Respondent::class)->create();
-        factory(App\Respondent::class, 49)->create()->each(function ($respondent) {
+        factory(App\Respondent::class, 50)->create()->each(function ($respondent) {
             $respondent->create();
         });
     }
