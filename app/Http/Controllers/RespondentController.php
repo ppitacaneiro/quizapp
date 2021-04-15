@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Respondent;
+use App\Country;
 use Illuminate\Http\Request;
 
 class RespondentController extends Controller
@@ -16,9 +17,7 @@ class RespondentController extends Controller
     {
         $respondents = Respondent::all();
 
-        // foreach ($respondents as $respondent) {
-        //     echo $respondent->name;
-        // }
+        return view('respondent.index')->with('respondents',$respondents);
     }
 
     /**
@@ -28,7 +27,9 @@ class RespondentController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Country::all();
+
+        return view('respondent.create')->with('countries',$countries);
     }
 
     /**
@@ -39,7 +40,13 @@ class RespondentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'inputName' => ['required'],
+            'inputEmail' => ['required','email'],
+            'inputAge' => ['required','digits_between:16,100']
+        ]);
+
+        
     }
 
     /**
