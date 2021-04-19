@@ -43,10 +43,19 @@ class RespondentController extends Controller
         $validatedData = $request->validate([
             'inputName' => ['required'],
             'inputEmail' => ['required','email'],
-            'inputAge' => ['required','digits_between:16,100']
+            'inputAge' => ['required','digits_between:0,2']
         ]);
-
         
+        $respondent = new Respondent();
+        $respondent->email = $request->inputEmail;
+        $respondent->name = $request->inputName;
+        $respondent->country = $request->inputCountry;
+        $respondent->age = $request->inputAge;
+        $respondent->sex = $request->inputSex;
+        $respondent->save();
+
+        $respondents = Respondent::all();
+        return view('respondent.index')->with('respondents',$respondents);
     }
 
     /**
@@ -55,9 +64,11 @@ class RespondentController extends Controller
      * @param  \App\Respondent  $respondent
      * @return \Illuminate\Http\Response
      */
-    public function show(Respondent $respondent)
+    public function show($id)
     {
-        //
+        $respondent = Respondent::find($id);
+
+        return view('respondent.show')->with('respondent',$respondent);
     }
 
     /**
@@ -66,9 +77,15 @@ class RespondentController extends Controller
      * @param  \App\Respondent  $respondent
      * @return \Illuminate\Http\Response
      */
-    public function edit(Respondent $respondent)
+    public function edit($id)
     {
-        //
+        $respondent = Respondent::find($id);
+        
+        $countries = Country::all();
+
+        return view('respondent.edit')
+                    ->with('respondent',$respondent)
+                    ->with('countries',$countries);
     }
 
     /**
@@ -78,9 +95,24 @@ class RespondentController extends Controller
      * @param  \App\Respondent  $respondent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Respondent $respondent)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'inputName' => ['required'],
+            'inputEmail' => ['required','email'],
+            'inputAge' => ['required','digits_between:0,2']
+        ]);
+
+        $respondent = Respondent::find($id);
+        $respondent->email = $request->inputEmail;
+        $respondent->name = $request->inputName;
+        $respondent->country = $request->inputCountry;
+        $respondent->age = $request->inputAge;
+        $respondent->sex = $request->inputSex;
+        $respondent->save();
+
+        $respondents = Respondent::all();
+        return view('respondent.index')->with('respondents',$respondents);
     }
 
     /**
@@ -89,8 +121,11 @@ class RespondentController extends Controller
      * @param  \App\Respondent  $respondent
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Respondent $respondent)
+    public function destroy($id)
     {
-        //
+        Respondent::destroy($id);
+        
+        $respondents = Respondent::all();
+        return view('respondent.index')->with('respondents',$respondents);
     }
 }
